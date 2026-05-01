@@ -7,9 +7,9 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "Main.cpp",       // ✅ add all your .cpp files
-                "QueueLL.cpp",
-                "StackLL.cpp",
+                "Main.cpp",       
+                "Queue.cpp",
+                "Stack.cpp",
                 "-o",
                 "${fileDirname}\\main.exe"
             ],

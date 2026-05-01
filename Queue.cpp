@@ -2,165 +2,178 @@
 #include <iostream>
 using namespace std;
 
-// ============================================
-//           QueueArr Implementation
-// ============================================
+// ==================== Queue with Circular Array ====================
 
-QueueArr::QueueArr(int size) {
-    capacity = size;
-    arr = new int[capacity];
-    front = 0;
-    rear = -1;
-    count = 0;
+// note: the code rear = (rear + 1) % capacity; adds the circular functionality
+// to the queue. as if the rear or front or any other indicator reaches the end
+// of the array, it will go back to the beginning because the modulus will be
+// zero.
+
+QueueCircularArray::QueueCircularArray(int size) {
+  capacity = size;
+  arr = new int[capacity];
+  front = 0;
+  // note: rear starts at -1 because in the enqueue function, we increment rear
+  // first so -1 + 1 = 0, and the first element will be added at index 0.
+  rear = -1;
+  // note: tracking the count of elements makes checking for full/empty states
+  count = 0;
 }
 
-QueueArr::~QueueArr() {
-    delete[] arr;
-    cout << "QueueArr destroyed, memory freed.\n";
+// the destructor
+QueueCircularArray::~QueueCircularArray() { delete[] arr; }
+
+void QueueCircularArray::enqueue(int value) {
+  if (isFull()) {
+    cout << "Queue is full! there is no space to add new element." << endl;
+    return;
+  }
+
+  // move the rear pointer circularly, then insert the new value
+  rear = (rear + 1) % capacity;
+  arr[rear] = value;
+  count++;
 }
 
-void QueueArr::enqueue(int value) {
-    if (isFull()) {
-        // resize the array
-        int newCapacity = capacity * 2;
-        int* newArr = new int[newCapacity];
-        // copy elements in order from front to rear
-        for (int i = 0; i < count; i++)
-            newArr[i] = arr[(front + i) % capacity];
-        delete[] arr;
-        arr = newArr;
-        front = 0;
-        rear = count - 1;
-        capacity = newCapacity;
-        cout << "QueueArr resized to " << capacity << "\n";
+int QueueCircularArray::dequeue() {
+  if (isEmpty()) {
+    cout << "Queue is empty! there is no element to remove." << endl;
+    return -1;
+  }
+  // save the value first to return it before moving the front pointer
+  // circularly
+  int value = arr[front];
+  front = (front + 1) % capacity;
+  count--;
+  return value;
+}
+
+bool QueueCircularArray::isEmpty() {
+  if (count == 0) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+bool QueueCircularArray::isFull() {
+  if (count == capacity) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+void QueueCircularArray::display() {
+  if (isEmpty()) {
+    cout << "Queue is empty." << endl;
+  } else {
+    cout << "Queue: ";
+    // note: we use 'i' to count the exact number of elements we printed (from 0
+    // to count -1 "i < count"), and we use 'current' to traverse the array
+    // circularly starting from the front element
+    for (int i = 0, current = front; i < count;
+         i++, current = (current + 1) % capacity) {
+      cout << arr[current] << ',' << ' ';
     }
-    rear = (rear + 1) % capacity;
-    arr[rear] = value;
-    count++;
-}
-
-int QueueArr::dequeue() {
-    if (isEmpty()) {
-        cout << "QueueArr is empty!\n";
-        return -1;
-    }
-    int value = arr[front];
-    front = (front + 1) % capacity;
-    count--;
-    return value;
-}
-
-int QueueArr::peek() {
-    if (isEmpty()) {
-        cout << "QueueArr is empty!\n";
-        return -1;
-    }
-    return arr[front];
-}
-
-bool QueueArr::isEmpty() {
-    return count == 0;
-}
-
-bool QueueArr::isFull() {
-    return count == capacity;
-}
-
-int QueueArr::getSize() {
-    return count;
-}
-
-void QueueArr::display() {
-    if (isEmpty()) {
-        cout << "QueueArr is empty!\n";
-        return;
-    }
-    cout << "Front -> ";
-    for (int i = 0; i < count; i++) {
-        cout << arr[(front + i) % capacity];
-        if (i < count - 1) cout << " -> ";
-    }
-    cout << " <- Rear";
-    cout << "  (size: " << count << ")\n";
+      cout << endl;
+  }
 }
 
 
-// ============================================
-//           QueueLL Implementation
-// ============================================
+// ==================== Queue with Linked List ====================
 
-QueueLL::QueueLL() {
+// Constructor - initialize front and rear to null
+QueueLinkedList::QueueLinkedList() {
     front = nullptr;
     rear = nullptr;
     size = 0;
 }
 
-QueueLL::~QueueLL() {
-    while (!isEmpty())
+// Destructor - free all nodes from memory
+QueueLinkedList::~QueueLinkedList() {
+    while (!isEmpty()) {
         dequeue();
-    cout << "QueueLL destroyed, memory freed.\n";
+    }
+    cout << "Queue destroyed, memory freed.\n";
 }
 
-void QueueLL::enqueue(int value) {
+// Enqueue - always add to the rear
+void QueueLinkedList::enqueue(int value) {
+    // create a new node
     Node* newNode = new Node;
     newNode->data = value;
     newNode->next = nullptr;
 
+    // check (if queue is empty, both front and rear point to new node)
     if (isEmpty()) {
         front = newNode;
         rear = newNode;
     } else {
+        // link new node after the current rear
         rear->next = newNode;
+        // move rear pointer to the new node
         rear = newNode;
     }
+
     size++;
+    cout << value << " enqueued successfully.\n";
 }
 
-int QueueLL::dequeue() {
+// Dequeue - always remove from the front
+int QueueLinkedList::dequeue() {
+    // check if queue is empty (underflow)
     if (isEmpty()) {
-        cout << "QueueLL is empty!\n";
+        cout << "Queue is empty! (Underflow)\n";
         return -1;
     }
+
+    // save front value to return it
     int value = front->data;
+
+    // move front pointer to the next node
     Node* temp = front;
     front = front->next;
-    delete temp;
+    delete temp; // free the old front node from memory
 
-    if (front == nullptr)
+    // if queue became empty, set rear to null as well
+    if (front == nullptr) {
         rear = nullptr;
+    }
 
     size--;
     return value;
 }
 
-int QueueLL::peek() {
+// Peek - return front value without removing it
+int QueueLinkedList::peek() {
     if (isEmpty()) {
-        cout << "QueueLL is empty!\n";
+        cout << "Queue is empty!\n";
         return -1;
     }
     return front->data;
 }
 
-bool QueueLL::isEmpty() {
-    return size == 0;
+// isEmpty - check if queue has no elements
+bool QueueLinkedList::isEmpty() {
+    return front == nullptr;
 }
 
-int QueueLL::getSize() {
-    return size;
-}
-
-void QueueLL::display() {
+// Display - print all elements from front to rear
+void QueueLinkedList::display() {
     if (isEmpty()) {
-        cout << "QueueLL is empty!\n";
+        cout << "Queue is empty!\n";
         return;
     }
+
     cout << "Front -> ";
     Node* current = front;
+
+    // traverse all nodes and print them
     while (current != nullptr) {
         cout << current->data;
         if (current->next != nullptr) cout << " -> ";
         current = current->next;
     }
-    cout << " <- Rear";
-    cout << "  (size: " << size << ")\n";
+    cout << " <- Rear\n";
 }

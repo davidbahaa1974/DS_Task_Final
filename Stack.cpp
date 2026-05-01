@@ -2,157 +2,157 @@
 #include <iostream>
 using namespace std;
 
-// ============================================
-// StackArr Implementation
-// ============================================
+// ==================== Stack with Array ====================
 
-StackArr::StackArr(int size) {
-    capacity = size;
-    top = -1;
-    array = new int[capacity];
+stackArr::stackArr(){                               //to intialize the memory
+cout << "Please enter the starting stack size: ";
+cin >> capacity;
+top =-1;
+array=new int[capacity];
 }
 
-StackArr::~StackArr() {
+stackArr::~stackArr(){                              //cleans the memory
     delete[] array;
-    cout << "StackArr destroyed, memory freed.\n";
 }
 
-void StackArr::push(int val) {
-    // resize if full
-    if (top >= capacity - 1) {
-        int newCapacity = capacity * 2;
-        int* newArray = new int[newCapacity];
-        for (int i = 0; i <= top; i++)
-            newArray[i] = array[i];
-        delete[] array;
-        array = newArray;
-        capacity = newCapacity;
-        cout << "StackArr resized to " << capacity << "\n";
+void stackArr::push (int val){                      //add element on top
+
+    if (top>=capacity-1){                           //resize the array
+    int newcapacity = capacity*2;
+    int* newArray = new int[newcapacity];
+    for (int i = 0; i <= top; i++) {                //coping the old array to the new one
+        newArray[i] = array[i];
+}   
+        delete[] array;                             // deleting the old array
+        array = newArray;       
+        capacity = newcapacity; 
     }
-    array[++top] = val;
+    
+    top++;
+    array[top]=val;
+
 }
 
-bool StackArr::isEmpty() {
-    return top == -1;
+bool stackArr::isempty(){                           //to check if the stack is empty
+    return top==-1;
 }
 
-void StackArr::pop() {
-    if (isEmpty()) {
-        cout << "StackArr is empty!\n";
-        return;
-    }
+void stackArr::pop(){                               //delete element on top
+if (isempty()){
+    cout<<"stack is empty";
+}    
+else {
     top--;
-}
+}}
 
-void StackArr::pop(int& val) {
-    if (isEmpty()) {
-        cout << "StackArr is empty!\n";
-        return;
-    }
+void stackArr::pop(int&val)                         //to return the value of the deleted element
+{
+    if (isempty()){
+    cout<<"stack is empty";
+}    
+    else {
     val = array[top];
     top--;
 }
-
-void StackArr::peek() {
-    if (isEmpty()) {
-        cout << "StackArr is empty!\n";
-        return;
-    }
-    cout << "Top: " << array[top] << "\n";
+    
 }
 
-void StackArr::peek(int& val) {
-    if (isEmpty()) {
-        cout << "StackArr is empty!\n";
-        return;
+void stackArr::peek(){                            //to print the value of the top element
+    if (isempty()){
+        cout<<"stack is empty";
     }
-    val = array[top];
+    else {
+       cout<<array[top]; 
+    } 
 }
 
-int StackArr::getSize() {
-    return top + 1;
+void stackArr::peek(int&val){                      //to return the value of the top
+    if (isempty()){
+        cout<<"stack is empty";
+    }
+    else {
+         val=array[top];
+    }
 }
 
-void StackArr::print() {
-    if (isEmpty()) {
-        cout << "StackArr is empty!\n";
-        return;
+void stackArr::print(){                          //print all the element to check the implemntation is right
+    for (int i = top; i >= 0; i--){
+        cout<<array[i]<<" ";
     }
-    cout << "Top -> ";
-    for (int i = top; i >= 0; i--) {
-        cout << array[i];
-        if (i > 0) cout << " -> ";
-    }
-    cout << "\n";
 }
 
 
-// ============================================
-// StackLL Implementation
-// ============================================
+// ==================== Stack with Linked List ====================
 
-StackLL::StackLL() {
+StackLL::StackLL(){                         //constructor
     top = nullptr;
     length = 0;
 }
 
-StackLL::~StackLL() {
-    while (!isEmpty()) {
+StackLL::~StackLL(){                        //Destructor to free the memory used by the stack
+    while(!isEmpty()){
         Node* temp = top;
         top = top->next;
         delete temp;
     }
-    cout << "StackLL destroyed, memory freed.\n";
+
 }
 
-bool StackLL::isEmpty() {
-    return top == nullptr;
+//this retuen true if the stack is empty and false if it is not empty
+bool StackLL::isEmpty(){
+return !length;
 }
 
-void StackLL::push(int value) {
-    Node* newNode = new Node;
-    newNode->data = value;
-    newNode->next = top;
-    top = newNode;
-    length++;
+
+//to apply LIFO principle i will make it with prepend and removefirst to make O(1)
+
+void StackLL::push(int value ){                  //to add an item to the stack from first
+Node* newnode= new Node;                            
+newnode->next = top ;                            
+newnode->data = value;
+top= newnode;
+length++;
 }
 
-int StackLL::pop() {
-    if (isEmpty()) {
-        cout << "StackLL is empty!\n";
-        return -1;
-    }
-    Node* temp = top;
-    int val = temp->data;
-    top = top->next;
-    delete temp;
-    length--;
-    return val;
+
+int StackLL::pop(){                           //to remove an item from the stack and return its value
+if(isEmpty()){                              
+cout<<"Error :the stack is Empty "<<endl;
+return -1;
 }
 
-int StackLL::peek() {
-    if (isEmpty()) {
-        cout << "StackLL is empty!\n";
-        return -1;
-    }
+else {   
+Node* temp= top;
+int val = temp->data;
+top= top->next;
+delete temp;
+length--;
+return val;
+}
+}
+
+
+int StackLL::peek(){                         //to return the value of the top item without removing it
+if(isEmpty()){
+cout<<"Error :the stack is Empty "<<endl;
+return -1;
+}
+else
     return top->data;
+
 }
 
-int StackLL::getSize() {
-    return length;
-}
-
-void StackLL::print() {
-    if (isEmpty()) {
-        cout << "StackLL is empty!\n";
+void StackLL::print(){                     //to print the elements of the stack from top to bottom
+    if(isEmpty()){
+        cout << "Stack is empty" << endl;
         return;
     }
     cout << "Top -> ";
     Node* current = top;
-    while (current != nullptr) {
+    while(current != nullptr){
         cout << current->data;
-        if (current->next != nullptr) cout << " -> ";
+        if(current->next != nullptr) cout << " -> ";
         current = current->next;
     }
-    cout << "\n";
+    cout << endl;
 }

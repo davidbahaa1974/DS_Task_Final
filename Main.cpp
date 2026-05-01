@@ -3,192 +3,133 @@
 #include "Queue.h"
 using namespace std;
 
-// ============================================
-// Test Helper Functions
-// ============================================
-void printSeparator(string title) {
-    cout << "\n";
-    cout << "============================================\n";
-    cout << "   " << title << "\n";
-    cout << "============================================\n";
-}
-
-void printSubTest(string title) {
-    cout << "\n--- " << title << " ---\n";
-}
-
-// ============================================
-// Stack Array Tests
-// ============================================
-void testStackArr() {
-    printSeparator("STACK ARRAY TEST");
-
-    StackArr s(3);
-
-    printSubTest("Push 10, 20, 30, 40 (resize at 40)");
-    s.push(10);
-    s.push(20);
-    s.push(30);
-    s.push(40); // triggers resize
-    s.print();  // Top -> 40 -> 30 -> 20 -> 10
-
-    printSubTest("Peek");
-    s.peek();   // Top: 40
-
-    printSubTest("Pop one element");
-    s.pop();
-    s.print();  // Top -> 30 -> 20 -> 10
-
-    printSubTest("Pop with value");
-    int val;
-    s.pop(val);
-    cout << "Popped value: " << val << "\n";
-    s.print();  // Top -> 20 -> 10
-
-    printSubTest("Peek with value");
-    int peekVal;
-    s.peek(peekVal);
-    cout << "Peek value: " << peekVal << "\n";
-
-    printSubTest("Size");
-    cout << "Size: " << s.getSize() << "\n";
-
-    printSubTest("Pop all elements");
-    s.pop();
-    s.pop();
-    s.print();  // StackArr is empty!
-
-    printSubTest("Pop from empty stack");
-    s.pop();    // StackArr is empty!
-}
-
-// ============================================
-// Stack Linked List Tests
-// ============================================
-void testStackLL() {
-    printSeparator("STACK LINKED LIST TEST");
-
-    StackLL s;
-
-    printSubTest("Push 10, 20, 30");
-    s.push(10);
-    s.push(20);
-    s.push(30);
-    s.print();  // Top -> 30 -> 20 -> 10
-
-    printSubTest("Peek");
-    cout << "Peek: " << s.peek() << "\n";  // 30
-
-    printSubTest("Pop one element");
-    cout << "Popped: " << s.pop() << "\n"; // 30
-    s.print();  // Top -> 20 -> 10
-
-    printSubTest("Size");
-    cout << "Size: " << s.getSize() << "\n"; // 2
-
-    printSubTest("Pop all elements");
-    s.pop();
-    s.pop();
-    s.print();  // StackLL is empty!
-
-    printSubTest("Pop from empty stack");
-    s.pop();    // StackLL is empty!
-
-    printSubTest("Peek from empty stack");
-    s.peek();   // StackLL is empty!
-}
-
-// ============================================
-// Queue Array Tests
-// ============================================
-void testQueueArr() {
-    printSeparator("QUEUE ARRAY TEST");
-
-    QueueArr q(3);
-
-    printSubTest("Enqueue 10, 20, 30, 40 (resize at 40)");
-    q.enqueue(10);
-    q.enqueue(20);
-    q.enqueue(30);
-    q.enqueue(40); // triggers resize
-    q.display();   // Front -> 10 -> 20 -> 30 -> 40 <- Rear
-
-    printSubTest("Peek");
-    cout << "Peek: " << q.peek() << "\n";  // 10
-
-    printSubTest("Dequeue two elements");
-    cout << "Dequeued: " << q.dequeue() << "\n"; // 10
-    cout << "Dequeued: " << q.dequeue() << "\n"; // 20
-    q.display();   // Front -> 30 -> 40 <- Rear
-
-    printSubTest("Size");
-    cout << "Size: " << q.getSize() << "\n"; // 2
-
-    printSubTest("Dequeue all elements");
-    q.dequeue();
-    q.dequeue();
-    q.display();   // QueueArr is empty!
-
-    printSubTest("Dequeue from empty queue");
-    q.dequeue();   // QueueArr is empty!
-
-    printSubTest("Circular behavior test");
-    q.enqueue(100);
-    q.enqueue(200);
-    q.enqueue(300);
-    q.display();   // Front -> 100 -> 200 -> 300 <- Rear
-}
-
-// ============================================
-// Queue Linked List Tests
-// ============================================
-void testQueueLL() {
-    printSeparator("QUEUE LINKED LIST TEST");
-
-    QueueLL q;
-
-    printSubTest("Enqueue 10, 20, 30, 40");
-    q.enqueue(10);
-    q.enqueue(20);
-    q.enqueue(30);
-    q.enqueue(40);
-    q.display();   // Front -> 10 -> 20 -> 30 -> 40 <- Rear
-
-    printSubTest("Peek");
-    cout << "Peek: " << q.peek() << "\n";  // 10
-
-    printSubTest("Dequeue two elements");
-    cout << "Dequeued: " << q.dequeue() << "\n"; // 10
-    cout << "Dequeued: " << q.dequeue() << "\n"; // 20
-    q.display();   // Front -> 30 -> 40 <- Rear
-
-    printSubTest("Size");
-    cout << "Size: " << q.getSize() << "\n"; // 2
-
-    printSubTest("Dequeue all elements");
-    q.dequeue();
-    q.dequeue();
-    q.display();   // QueueLL is empty!
-
-    printSubTest("Dequeue from empty queue");
-    q.dequeue();   // QueueLL is empty!
-
-    printSubTest("Peek from empty queue");
-    q.peek();      // QueueLL is empty!
-}
-
-// ============================================
-// Main
-// ============================================
 int main() {
-    testStackArr();
-    testStackLL();
-    testQueueArr();
-    testQueueLL();
 
-    cout << "\n============================================\n";
-    cout << "   ALL TESTS COMPLETED\n";
-    cout << "============================================\n";
+    // ==================== Stack with Array ====================
+    cout << "\n========== Stack with Array ==========\n";
+    stackArr sa;
+
+    sa.push(10);
+    sa.push(20);
+    sa.push(30);
+    sa.push(40);
+
+    cout << "Stack after pushing 10, 20, 30, 40:\n";
+    sa.print();
+    cout << endl;
+
+    cout << "Peek top: ";
+    sa.peek();
+    cout << endl;
+
+    sa.pop();
+    cout << "After pop:\n";
+    sa.print();
+    cout << endl;
+    sa.pop(); 
+
+    cout << "Stack after second pop:\n";
+    sa.print();
+    cout << endl;
+
+    sa.pop();
+    sa.pop();   
+
+     cout << "Stack after popping all elements:\n"; 
+
+    sa.print();
+    cout << endl;
+
+     sa.pop();        // popping from empty stack to test underflow handling
+
+    // ==================== Stack with Linked List ====================
+    cout << "\n========== Stack with Linked List ==========\n";
+    StackLL sl;
+
+    sl.push(10);
+    sl.push(20);
+    sl.push(30);
+    sl.push(40);
+
+    cout << "Peek top: " << sl.peek() << endl;
+
+    sl.print();
+
+    cout << "Popped: " << sl.pop() << endl;
+    cout << "Popped: " << sl.pop() << endl;
+
+    cout << "Stack after two pops:\n";
+    sl.print();
+
+    cout << "Peek after two pops: " << sl.peek() << endl;
+    sl.print();
+
+    sl.pop();
+    sl.pop();
+    cout << "Stack after popping all elements:\n";
+    sl.print();
+    cout << "Popping from empty stack: " << sl.pop() << endl; // popping from empty stack to test underflow handling
+
+
+    // ==================== Queue with Circular Array ====================
+    cout << "\n========== Queue with Circular Array ==========\n";
+    QueueCircularArray qca(5);
+
+    qca.enqueue(10);
+    qca.enqueue(20);
+    qca.enqueue(30);
+    qca.enqueue(40);
+
+    cout << "Queue after enqueuing 10, 20, 30, 40:\n";
+    qca.display();
+
+    cout << "Dequeued: " << qca.dequeue() << endl;
+    cout << "Dequeued: " << qca.dequeue() << endl;
+
+    cout << "Queue after two dequeues:\n";
+    qca.display();
+    qca.enqueue(50);
+    qca.enqueue(60); // this should fill the queue to capacity
+    cout << "Queue after enqueuing 50 and 60:\n";
+    qca.display();
+    qca.enqueue(70);
+    qca.display();
+    qca.enqueue(80); // this should trigger overflow handling again
+    qca.dequeue();
+    qca.dequeue();
+    qca.display();
+    qca.dequeue();
+    qca.dequeue();
+    qca.display();
+    qca.dequeue();
+    qca.display();
+    qca.dequeue(); // this should trigger underflow handling
+    qca.display();
+    // ==================== Queue with Linked List ====================
+    cout << "\n========== Queue with Linked List ==========\n";
+    QueueLinkedList qll;
+
+    qll.enqueue(10);
+    qll.enqueue(20);
+    qll.enqueue(30);
+    qll.enqueue(40);
+
+    cout << "Queue after enqueuing 10, 20, 30, 40:\n";
+    qll.display();
+
+    cout << "Peek front: " << qll.peek() << endl;
+
+    cout << "Dequeued: " << qll.dequeue() << endl;
+    cout << "Dequeued: " << qll.dequeue() << endl;
+
+    cout << "Queue after two dequeues:\n";
+    qll.display();
+    cout << "Peek after two dequeues: " << qll.peek() << endl;
+    qll.dequeue();
+    qll.dequeue();
+    cout << "Queue after dequeuing all elements:\n";    
+    qll.display();
+    cout << "Dequeuing from empty queue: " << qll.dequeue() << endl;
 
     return 0;
 }
