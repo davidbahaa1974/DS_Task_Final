@@ -22,7 +22,8 @@ int main() {
     sa.peek();
     cout << endl;
 
-    sa.pop();
+    int poppedValue;
+    sa.pop(poppedValue);
     cout << "After pop:\n";
     sa.print();
     cout << endl;
@@ -35,12 +36,13 @@ int main() {
     sa.pop();
     sa.pop();   
 
-     cout << "Stack after popping all elements:\n"; 
+    cout << "Stack after popping all elements:\n"; 
 
     sa.print();
     cout << endl;
 
-     sa.pop();        // popping from empty stack to test underflow handling
+    cout << "Popped value: " << poppedValue << endl;
+    sa.pop();        // popping from empty stack to test underflow handling
 
     // ==================== Stack with Linked List ====================
     cout << "\n========== Stack with Linked List ==========\n";
